@@ -7,11 +7,11 @@
     - [2.1 partial方法基本使用](#21-partial方法基本使用)
     - [2.2 partial原码分析](#22-partial原码分析)
     - [2.3 functools.warps实现分析](#23-functoolswarps实现分析)
-- [3 lsu_cache方法](#3-lsu_cache方法)
+- [3 lru_cache方法](#3-lru_cache方法)
     - [3.1 基本使用](#31-基本使用)
     - [3.2 lru_cache原码分析](#32-lru_cache原码分析)
     - [3.3 斐波那契序列的lru改造](#33-斐波那契序列的lru改造)
-    - [3.4 lsu_cache的总结](#34-lsu_cache的总结)
+    - [3.4 lru_cache的总结](#34-lru_cache的总结)
 
 <!-- /TOC -->
 # 介绍
@@ -198,7 +198,7 @@ def check(fn):
 - `update_wrapper` 在这里将wrapped的属性(也就是fn)，拷贝到了wrapper上，并返回了wrapper。  
 
 经过上述数说明 `@functools.wraps(fn)` 就等价于 `wrapper = update_wrapper(wrapper)`，那么再来看拷贝的过程，就很好理解了。
-# 3 lsu_cache方法
+# 3 lru_cache方法
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;学习lsu_cache方法，那么不得不提cache，那什么是cache呢？我们说数据是存放在磁盘上的，CPU如果需要提取数据那么需要从磁盘上拿，磁盘速度很慢，直接拿的话，就很耗时间，所以操作系统会把一些数据提前存储到内存中，当CPU需要时，直接从内存中读取即可，但是内存毕竟是有限的，不是所有空间都用来存这些数据，所以内存中的一小部分用来存储磁盘上读写频繁的数据的空间，就可以简单的理解为cache(这里就不提CPU的L1,L2,L3 cache了).  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lsu_cache方法简单来说，就是当执行某一个函数时，把它的计算结果缓存到cache中，当下次调用时，就直接从缓存中拿就可以了，不用再次进行计算。这种特性对于那种计算非常耗时的场景时非常友好的。
 > 把函数的计算结果缓存，需要的时候直接调用，这种模式该如何实现呢？简单来讲就是通过一个东西来获取它对应的值，是不是和字典的元素很像？通过一个key获取它对应的value！实际上大多数缓存软件都是这种key-value结构！！！
@@ -386,7 +386,7 @@ times = (datetime.datetime.now() - start).total_seconds()
 print(times)  # 0.0
 ```
 > 速度简直要起飞了！
-## 3.4 lsu_cache的总结
+## 3.4 lru_cache的总结
 lru_cache使用的前提是：
 - 同样函数参数一定得到同样的结果
 - 函数执行时间很长，且要多次执行
